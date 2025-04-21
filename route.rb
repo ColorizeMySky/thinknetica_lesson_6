@@ -8,6 +8,8 @@ class Route
   def initialize(first, last)
     @stations = [first, last]
 
+    validate!
+
     register_instance
   end
 
@@ -17,5 +19,20 @@ class Route
 
   def remove_station(station)
     @stations.delete(station)
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
+  private
+
+  def validate!
+    raise "Начальная станция не может отсутствовать" if first.nil?
+    raise "Конечная станция не может отсутствовать" if last.nil?
+    raise "Начальная и конечная станции не могут совпадать" if first == last
   end
 end

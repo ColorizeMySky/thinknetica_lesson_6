@@ -7,6 +7,8 @@ class Train
 
   attr_reader :number,  :wagons, :type, :route,:current_station_index, :speed
 
+  NUMBER_FORMAT = /^[a-zа-я0-9]{3}-?[a-zа-я0-9]{2}$/i
+
   @@trains = []
 
   class << self
@@ -26,6 +28,8 @@ class Train
     @speed = 0
     @route = nil
     @current_station_index = nil
+
+    validate!
 
     @@trains << self
     register_instance
@@ -81,6 +85,13 @@ class Train
     move_to('backward')
   end
 
+  def valid?
+    validate!
+    true
+  rescue
+    false
+  end
+
   private
 
   # прячем прямой доступ к изменению скорости и количеству вагонов
@@ -106,5 +117,12 @@ class Train
     direction = type == 'forward' ? 1 : -1
     self.current_station_index += direction
     current_station.add_train(self)
+  end
+
+  def validate!
+    raise "Номер не может отсутствовать" if number.to_s.strip.empty?
+    raise "Номер имеет недопустимый формат" if number !~ NUMBER_FORMAT
+    raise "Тип поезда не может отсутствовать" if type.to_s.strip.empty?
+    raise "Неизвестный тип поезда. Допустимые значения: 'cargo', 'passenger'" unless ['cargo', 'passenger'].include?(type)
   end
 end
