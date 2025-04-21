@@ -37,18 +37,22 @@ class Main
   end
 
   def create_train
-    puts "Введите номер поезда: "
-    number = gets.chomp
-    puts "Выберите тип (1 - пассажирский, 2 - грузовой): "
-    type = gets.chomp.to_i
+      puts "Введите номер поезда: "
+      number = gets.chomp
+      puts "Выберите тип (1 - пассажирский, 2 - грузовой): "
+      type = gets.chomp.to_i
 
-    if(type == 1)
-      train = PassengerTrain.new(number)
-    else
-      train = CargoTrain.new(number)
-    end
+      train =  if type == 1
+        PassengerTrain.new(number)
+      else
+        CargoTrain.new(number)
+      end
 
-    @trains << train
+      @trains << train
+      puts "Создан поезд №#{number} (#{train.type})"
+    rescue => e
+      puts "Ошибка: #{e.message}"
+    retry
   end
 
   def create_route
