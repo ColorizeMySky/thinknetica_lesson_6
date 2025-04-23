@@ -31,8 +31,8 @@ class Route
   private
 
   def validate!
-    raise "Начальная станция не может отсутствовать" if first.nil?
-    raise "Конечная станция не может отсутствовать" if last.nil?
-    raise "Начальная и конечная станции не могут совпадать" if first == last
+    raise "Начальная станция не может отсутствовать" if @stations.first.nil?
+    raise "Конечная станция не может отсутствовать" if @stations.last.nil?
+    raise "Начальная и конечная станции не могут совпадать" if @stations.first == @stations.last
   end
 end

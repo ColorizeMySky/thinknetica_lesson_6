@@ -31,9 +31,12 @@ class Main
   end
 
   def create_station
-    puts "Введите название станции: "
-    name = gets.chomp
-    @stations << Station.new(name)
+      puts "Введите название станции: "
+      name = gets.chomp
+      @stations << Station.new(name)
+    rescue => e
+      puts "Ошибка: #{e.message}"
+    retry
   end
 
   def create_train
@@ -56,13 +59,17 @@ class Main
   end
 
   def create_route
-    puts "Введите номер начальной станции: "
-    first_index = gets.chomp.to_i - 1
-    puts "Введите номер конечной станции: "
-    last_index = gets.chomp.to_i - 1
+      puts "Введите номер начальной станции: "
+      first_index = gets.chomp.to_i - 1
+      puts "Введите номер конечной станции: "
+      last_index = gets.chomp.to_i - 1
 
-    route = Route.new(@stations[first_index], @stations[last_index])
-    @routes << route
+      route = Route.new(@stations[first_index], @stations[last_index])
+      @routes << route
+
+    rescue => e
+      puts "Ошибка: #{e.message}"
+    retry
   end
 
   def add_station_to_route
