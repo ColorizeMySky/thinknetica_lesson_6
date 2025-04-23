@@ -27,4 +27,8 @@ module Menu
     send(item[:action]) if item
   end
 
+  def exit_interface
+    exit
+  end
+
 end

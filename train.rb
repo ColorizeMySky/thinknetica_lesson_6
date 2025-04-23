@@ -1,9 +1,11 @@
 require_relative 'modules/instance_counter'
 require_relative 'modules/manufacturing_companies'
+require_relative 'modules/validator'
 
 class Train
   include InstanceCounter
   include ManufacturingCompanies
+  include Validator
 
   attr_reader :number,  :wagons, :type, :route,:current_station_index, :speed
 
@@ -85,12 +87,6 @@ class Train
     move_to('backward')
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end
 
   private
 
@@ -120,9 +116,12 @@ class Train
   end
 
   def validate!
-    raise "Номер не может отсутствовать" if number.to_s.strip.empty?
-    raise "Номер имеет недопустимый формат" if number !~ NUMBER_FORMAT
-    raise "Тип поезда не может отсутствовать" if type.to_s.strip.empty?
-    raise "Неизвестный тип поезда. Допустимые значения: 'cargo', 'passenger'" unless ['cargo', 'passenger'].include?(type)
+    errors = []
+    errors << "Номер не может отсутствовать" if number.to_s.strip.empty?
+    errors << "Номер имеет недопустимый формат" if number !~ NUMBER_FORMAT
+    errors << "Тип поезда не может отсутствовать" if type.to_s.strip.empty?
+    errors << "Неизвестный тип поезда. Допустимые значения: 'cargo', 'passenger'" unless ['cargo', 'passenger'].include?(type)
+
+    raise errors.join("\n") unless errors.empty?
   end
 end

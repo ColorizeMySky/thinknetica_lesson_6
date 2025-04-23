@@ -1,7 +1,9 @@
 require_relative 'modules/instance_counter'
+require_relative 'modules/validator'
 
 class Station
   include InstanceCounter
+  include Validator
 
   attr_reader :title, :trains
 
@@ -25,7 +27,7 @@ class Station
     register_instance
   end
 
-  def add_train(rain)
+  def add_train(train)
     @trains << train
   end
 
@@ -37,19 +39,15 @@ class Station
     @trains.count { |train| train.type == type }
   end
 
-  def valid?
-    validate!
-    true
-  rescue
-    false
-  end
-
   private
 
   def validate!
-    raise "Название не может отсутствовать" if title.to_s.strip.empty?
-    raise "Название станции слишком короткое (минимум 2 символа)" if title.length < 2
-    raise "Название станции слишком длинное (максимум 50 символов)" if title.length > 50
-    raise "Название станции содержит недопустимые символы" unless title !~ TITLE_FORMAT
+    errors = []
+    errors << "Название не может отсутствовать" if title.to_s.strip.empty?
+    errors << "Название станции слишком короткое (минимум 2 символа)" if title.length < 2
+    errors << "Название станции слишком длинное (максимум 50 символов)" if title.length > 50
+    errors << "Название станции содержит недопустимые символы" unless title !~ TITLE_FORMAT
+
+    raise errors.join("\n") unless errors.empty?
   end
 end

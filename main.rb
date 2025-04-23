@@ -26,10 +26,6 @@ class Main
 
   private
 
-  def exit_interface
-    exit
-  end
-
   def create_station
       puts "Введите название станции: "
       name = gets.chomp
