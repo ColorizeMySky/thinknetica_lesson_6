@@ -1,7 +1,9 @@
 require_relative 'modules/manufacturing_companies'
+require_relative 'modules/validator'
 
 class Wagon
   include ManufacturingCompanies
+  include Validator
 
   attr_reader :type
 
@@ -9,13 +11,6 @@ class Wagon
     @type = type
 
     validate!
-  end
-
-  def valid?
-    validate!
-    true
-  rescue
-    false
   end
 
   private
